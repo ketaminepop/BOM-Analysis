@@ -1,0 +1,8 @@
+Docker: Docker version 28.3.2, build 578ccf6
+Syft: syft 1.42.1
+Grype: grype 0.109.0
+Semgrep: 1.152.0
+Binwalk: 
+ScanCode: ScanCode version: 32.5.0
+ScanCode Output Format version: 4.1.0
+SPDX License list version: 3.27

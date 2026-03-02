@@ -1,0 +1,22 @@
+***Firmware Directory***
+./openwrt_rootfs/
+***Search for password files***
+##################################### passwd
+/bin/passwd
+/etc/passwd
+
+##################################### shadow
+/etc/shadow
+
+##################################### *.psk
+
+***Search for Unix-MD5 hashes***
+
+***List etc/ssl directory***
+total 4
+lrwxrwxrwx 1 kali kali   34 Apr 28  2023 cert.pem -> /etc/ssl/certs/ca-certificates.crt
+drwxr-xr-x 2 kali kali 4096 Apr 28  2023 certs
+
+***Search for SSL related files***
+##################################### *.crt
+/etc/ssl/certs/ca-certificates.crt
