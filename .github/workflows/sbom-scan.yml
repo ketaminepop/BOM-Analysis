@@ -1,15 +1,15 @@
 # .github/workflows/sbom-scan.yml
-# BOM Assignment — Forenzy Networks
+# SBOM Security Gate — Forenzy Networks Assignment
 # Author: Naman Vaishnav
-# Purpose: Automatically generate SBOM on every push and fail the build if any Critical CVE is found
+# Purpose: Generate SBOM and fail build on Critical vulnerabilities
 
 name: SBOM Security Gate
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
   pull_request:
-    branches: [main]
+    branches: [ main ]
 
 jobs:
   sbom-scan:
@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Generate SBOM (CycloneDX JSON)
         uses: anchore/sbom-action@v0
@@ -35,8 +35,8 @@ jobs:
           severity-cutoff: critical
 
       - name: Upload SBOM as Artifact
-        uses: actions/upload-artifact@v3
         if: always()
+        uses: actions/upload-artifact@v4
         with:
           name: sbom-report
           path: sbom.json
@@ -47,14 +47,12 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Run Semgrep Crypto Rules
+      - name: Run Semgrep Security Rules
         uses: returntocorp/semgrep-action@v1
         with:
-          config: >-
+          config: |
             p/secrets
             p/owasp-top-ten
             p/javascript
-        env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
