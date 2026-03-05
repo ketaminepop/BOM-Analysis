@@ -1,8 +1,3 @@
-# .github/workflows/sbom-scan.yml
-# SBOM Security Gate — Forenzy Networks Assignment
-# Author: Naman Vaishnav
-# Purpose: Generate SBOM and fail build on Critical vulnerabilities
-
 name: SBOM Security Gate
 
 on:
@@ -20,19 +15,24 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Generate SBOM (CycloneDX JSON)
-        uses: anchore/sbom-action@v0
+      # Scan directly on path — scan-action handles SBOM generation internally
+      # This avoids the "sbom format not recognized" error from passing external files
+      - name: Vulnerability Scan — Fail on Critical
+        uses: anchore/scan-action@v3
+        id: scan
+        with:
+          path: .
+          fail-build: true
+          severity-cutoff: critical
+
+      # Separately generate SBOM just for artifact archiving
+      - name: Generate SBOM for Artifact (CycloneDX JSON)
+        if: always()
+        uses: anchore/sbom-action@v0.17.0
         with:
           path: .
           format: cyclonedx-json
           output-file: sbom.json
-
-      - name: Vulnerability Scan — Fail on Critical
-        uses: anchore/scan-action@v3
-        with:
-          sbom: sbom.json
-          fail-build: true
-          severity-cutoff: critical
 
       - name: Upload SBOM as Artifact
         if: always()
